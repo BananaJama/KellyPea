@@ -4,9 +4,7 @@ function Reset-KellyPea {
     Begin {}
 
     Process {
-        if (Get-Variable ChosenPeas -ErrorAction SilentlyContinue) {
-            Remove-Variable -Name ChosenPeas -Scope Global
-        }
+        Remove-Item Env:\ChosenPeas
     }
 
     End {}

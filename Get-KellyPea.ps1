@@ -1,32 +1,35 @@
 function Get-KellyPea {
-    param (
-        
-    )
+    param ()
     
     Begin {
-        if (-not (Get-Variable -Name ChosenPeas -ErrorAction SilentlyContinue)) {
-            $Global:ChosenPeas = New-Object System.Collections.Generic.List[Int]
+        if (-not (Test-Path Env:\ChosenPeas)) {
+            $ChosenPeas = New-Object System.Collections.Generic.List[int]
         }
-
-        if ($Global:ChosenPeas.Count -eq 15) {
-            Write-Error "You have no Peas.  Please run Reset-KellyPea!!"
-            break
+        else {
+            $ChosenPeas = New-Object System.Collections.Generic.List[int]
+            foreach ($i in $env:ChosenPeas.Split(':')) {
+                $ChosenPeas.Add($i)
+            }
         }
     }
 
     Process {
-        $Pea = Get-Random -Minimum 1 -Maximum 16
+        if ($ChosenPeas.Count -eq 15) {
+            Write-Error "You need to reset the pea counter!!"
+            break
+        }
 
+        $Pea = Get-Random -Minimum 1 -Maximum 16
         while ($ChosenPeas -contains $Pea) {
             $Pea = Get-Random -Minimum 1 -Maximum 16
         }
+        $ChosenPeas.Add($Pea)
+        $env:ChosenPeas = $ChosenPeas -join ':'
 
-        $Global:ChosenPeas.Add($Pea)
-        Write-Host "Your pea is: $Pea"
+        Write-Host "Your pea is: $Pea"    
         Write-Host -NoNewLine 'Press any key to continue...'
         $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
         Clear-Host
-        Remove-Variable Pea
     }
 
     End {}
