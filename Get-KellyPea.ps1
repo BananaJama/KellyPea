@@ -2,11 +2,8 @@ function Get-KellyPea {
     param ()
     
     Begin {
-        if (-not (Test-Path Env:\ChosenPeas)) {
-            $ChosenPeas = New-Object System.Collections.Generic.List[int]
-        }
-        else {
-            $ChosenPeas = New-Object System.Collections.Generic.List[int]
+        $ChosenPeas = New-Object System.Collections.Generic.List[int]
+        if (Test-Path Env:\ChosenPeas) {
             foreach ($i in $env:ChosenPeas.Split(':')) {
                 $ChosenPeas.Add($i)
             }
